@@ -85,7 +85,7 @@ for i in range(1000):
     print(names[i])"""
 
 """# Create Model"""
-print('Fitting with GridSearch fo best model')
+print('Fitting with GridSearch for best model')
 
 results = open("results.txt", "a")
 
