@@ -103,6 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# models and results
+# models, results and dataset
 *.joblib
 *.txt
+*.jsonl
