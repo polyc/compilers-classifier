@@ -32,7 +32,7 @@ instructionExamples_test = []
 currentExample = ''
 
 """# Extracts mnemonics only"""
-for example in db.instructions:
+for example in test_db.instructions:
     for instr in example:
         mnemonics=instr.split()[0]
         currentExample += mnemonics + ' '
@@ -48,10 +48,10 @@ n_gram_vectorizer.fit(instructionExamples_train)
 X_test_n_grams = n_gram_vectorizer.transform(instructionExamples_test)
 
 #LOAD BEST MODEL
-bestName = 'opt[cnb_n_grams].joblib'
+bestName = 'compilers[cnb_n_grams].joblib'
 bestModel = joblib.load(bestName)
 
-results_name = "blind_set_results[opt].csv"
+results_name = "blind_set_results[compilers].csv"
 results = open(results_name, "a")
 
 """# Predict on Test set"""
