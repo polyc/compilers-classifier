@@ -6,7 +6,7 @@ import random
 
 import joblib
 
-from sklearn.model_selection import train_test_split, GridSearchCV, ShuffleSplit, cross_val_score
+from sklearn.model_selection import train_test_split, GridSearchCV, ShuffleSplit, cross_validate
 from sklearn.feature_extraction.text import *
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.naive_bayes import *
@@ -56,27 +56,30 @@ cnb_n_grams = ComplementNB()
 
 """# Models Cross Evaluation"""
 print("Performing Cross evaluation")
+metrics = ['accuracy','f1_macro']
+chosen_score_text = 'f1_score'
+chosen_score = 'test_f1_macro'
 cv = ShuffleSplit(n_splits=5, test_size=0.333, random_state=342)
-scores_1 = cross_val_score(mnb_bag_of_words, X_all_bag_of_words, y_all, cv=cv, n_jobs = -1, scoring='f1_macro')
-scores_2 = cross_val_score(cnb_bag_of_words, X_all_bag_of_words, y_all, cv=cv, n_jobs = -1, scoring='f1_macro')
-scores_3 = cross_val_score(mnb_n_grams, X_all_n_grams, y_all, cv=cv, n_jobs = -1, scoring='f1_macro')
-scores_4 = cross_val_score(cnb_n_grams, X_all_n_grams, y_all, cv=cv, n_jobs = -1, scoring='f1_macro')
+scores_1 = cross_validate(mnb_bag_of_words, X_all_bag_of_words, y_all, cv=cv, n_jobs = -1, scoring = metrics)
+scores_2 = cross_validate(cnb_bag_of_words, X_all_bag_of_words, y_all, cv=cv, n_jobs = -1, scoring = metrics)
+scores_3 = cross_validate(mnb_n_grams, X_all_n_grams, y_all, cv=cv, n_jobs = -1, scoring = metrics)
+scores_4 = cross_validate(cnb_n_grams, X_all_n_grams, y_all, cv=cv, n_jobs = -1, scoring = metrics)
 
 print("Bag of Words Representation")
 print("Simple MultinomialNB Model")
-print(scores_1)
-print("f1-score: %0.3f (+/- %0.2f)" % (scores_1.mean(), scores_1.std() * 2))
+#print(scores_1)
+print(chosen_score_text + ": %0.3f (+/- %0.2f)" % (scores_1[chosen_score].mean(), scores_1[chosen_score].std() * 2))
 print("ComplementNB Model")
-print(scores_2)
-print("f1-score: %0.3f (+/- %0.2f)" % (scores_2.mean(), scores_2.std() * 2))
+#print(scores_2)
+print(chosen_score_text + ": %0.3f (+/- %0.2f)" % (scores_2[chosen_score].mean(), scores_2[chosen_score].std() * 2))
 
 print("n_grams Representation")
 print("Simple MultinomialNB Model")
-print(scores_3)
-print("f1-score: %0.3f (+/- %0.2f)" % (scores_3.mean(), scores_3.std() * 2))
+#print(scores_3)
+print(chosen_score_text + ": %0.3f (+/- %0.2f)" % (scores_3[chosen_score].mean(), scores_3[chosen_score].std() * 2))
 print("ComplementNB Model")
-print(scores_4)
-print("f1-score: %0.3f (+/- %0.2f)" % (scores_4.mean(), scores_4.std() * 2))
+#print(scores_4)
+print(chosen_score_text + ": %0.3f (+/- %0.2f)" % (scores_4[chosen_score].mean(), scores_4[chosen_score].std() * 2))
 
 """# SVM GridSearch"""
 """parameters = {'kernel':['linear', 'poly', 'rbf'], 'C':[0.01, 0.1, 1, 10, 100]  }
@@ -140,7 +143,7 @@ print("Train: %d - Test: %d" %(X_train_2.shape[0],X_test_2.shape[0]))
 print("Fitting models")
 mnb_bag_of_words.fit(X_train_1, y_train_1)
 cnb_bag_of_words.fit(X_train_1, y_train_1)
-svm_bag_of_words.fir(X_train_1, y_train_1)
+svm_bag_of_words.fit(X_train_1, y_train_1)
 mnb_n_grams.fit(X_train_2, y_train_2)
 cnb_n_grams.fit(X_train_2, y_train_2)
 svm_n_grams.fit(X_train_2, y_train_2)
