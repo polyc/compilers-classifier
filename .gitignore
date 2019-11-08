@@ -107,3 +107,4 @@ venv.bak/
 *.joblib
 *.txt
 *.jsonl
+*.csv
